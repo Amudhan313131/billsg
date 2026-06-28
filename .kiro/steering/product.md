@@ -39,8 +39,43 @@ Any Singaporean who has received a public hospital bill they don't understand. P
 5. If a user appears to be in financial distress, prioritise MediFund and ComCare referrals
 6. Always display this disclaimer on every output: "This is guidance to help you ask the right questions. Always consult a Medical Social Worker before taking action."
 
+## Scope — What BillSG Covers
+
+### In Scope
+BillSG focuses exclusively on acute inpatient care at Singapore's public hospitals (SGH, TTSH, NUH, SKH, NTFGH). This is where bill confusion is highest and financial stakes are largest.
+
+The 12 schemes BillSG covers:
+
+**Automatically applied by hospital — we explain these:**
+- Government Subsidy (income-based, up to 80% for citizens)
+- MediShield Life
+- MediSave
+
+**Application-based — what patients almost always miss:**
+- CHAS (Blue / Orange / Green tiers)
+- Pioneer Generation Package
+- Merdeka Generation Package
+- MediFund
+- MediFund Silver (for elderly)
+- MediFund Junior (for children)
+- Medication Assistance Fund (MAF)
+- ElderFund
+- ComCare
+- Flexi-MediSave (for patients aged 60+)
+
+### Out of Scope for v1
+- Private hospital bills
+- Outpatient/polyclinic bills
+- Dental bills
+- Long-term care / nursing home bills
+- Non-healthcare government schemes (Baby Bonus, HDB grants, Workfare etc.)
+
+We acknowledge these exist. They are planned for future versions. Judges should note that focused scope is intentional — one thing done excellently beats many things done poorly.
+
 ## What BillSG Is Not
 - Not a financial advisor
 - Not a legal advisor
 - Not a replacement for a Medical Social Worker
 - Not a guarantee of eligibility for any scheme
+- Not a tool for private hospital bills
+- Not a tool for outpatient or dental bills
