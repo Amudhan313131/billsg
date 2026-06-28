@@ -1,0 +1,67 @@
+# BillSG — Tech Steering
+
+## Tech Stack
+- Frontend: Next.js 16 + TypeScript + Tailwind CSS
+- Bill Parsing: AWS Textract
+- LLM: Amazon Bedrock (Claude)
+- File Storage: AWS S3
+- MCP Server: Custom Node.js server exposing Singapore 2026 healthcare policy data
+- Rules Engine: Pure TypeScript — deterministic eligibility logic, no AI
+- Hosting: Vercel (frontend) + AWS Lambda (API routes)
+
+## Project Structure
+billsg/
+
+├── app/                    # Next.js app router
+
+│   ├── page.tsx            # Landing page
+
+│   ├── onboarding/         # Onboarding flow
+
+│   ├── dashboard/          # Entitlement dashboard
+
+│   ├── upload/             # Bill upload
+
+│   ├── results/            # Explain + Match results
+
+│   └── api/                # API routes
+
+│       ├── onboarding/     # Profile submission + scheme matching
+
+│       ├── explain-bill/   # Textract + LLM explanation
+
+│       └── match-schemes/  # Scheme Matching Agent
+
+├── lib/                    # Core logic
+
+│   ├── eligibility.ts      # Rules engine
+
+│   ├── billParser.ts       # Bill parsing logic
+
+│   ├── textract.ts         # AWS Textract integration
+
+│   └── s3.ts               # AWS S3 integration
+
+├── mcp-server/             # Custom MCP server
+
+└── .kiro/                  # Kiro specs, steering, hooks, agents
+
+## Coding Standards
+- All files in TypeScript — no plain JavaScript
+- All API routes use Next.js App Router format
+- All functions must have explicit type annotations
+- No console.log in production code — use proper error handling
+- Every API route must validate inputs before processing
+
+## Environment Variables Required
+- AWS_ACCESS_KEY_ID
+- AWS_SECRET_ACCESS_KEY
+- AWS_REGION
+- BEDROCK_MODEL_ID
+- S3_BUCKET_NAME
+
+## Key Constraints
+- Never store sensitive patient data beyond the current session
+- Never log bill contents or personal health information
+- Always show disclaimer on every AI-generated output
+- Bill parsing targets Singapore public hospital bill format only (SGH, TTSH, NUH, SKH, NTFGH)
