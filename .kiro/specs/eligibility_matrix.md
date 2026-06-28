@@ -236,13 +236,31 @@ interface SchemeMatch {
 ---
 
 ## Scheme 13 — ComCare
-**What it is:** Short-to-medium term assistance for low-income Singaporeans who cannot pay bills.
+**What it is:** Financial assistance for lower-income Singaporeans who cannot meet basic living needs including medical expenses at public healthcare institutions.
+
+**Two types relevant to hospital bills:**
+
+**Short-to-Medium-Term Assistance (SMTA):**
+- For those temporarily unable to work or earning low income
+- Monthly PCHI ≤ $800 (case-by-case assessment even if above threshold)
+- At least one immediate family member must be SC
+- Apply: Online via SupportGoWhere or visit nearest Social Service Office
+- Hotline: 1800 222 0000
+
+**Long-Term Assistance (LTA):**
+- For those permanently unable to work due to old age, illness or disability
+- Must be SC or PR
+- Elderly with inadequate family support or savings
+- Monthly cash assistance from $760 (1 person) to $2,230 (4 persons) from April 2025
+- Apply: Visit any Social Service Office
 
 **Acceptance Criteria:**
-- GIVEN citizenship = SC
-- AND monthly_pchi <= 1900
+- GIVEN citizenship IN (SC, PR)
+- AND monthly_pchi <= 800
+- OR user indicates permanent inability to work due to age/illness/disability
 - THEN status = unclaimed
-- AND action: Approach Medical Social Worker OR visit any SSO office
+- AND action: Visit nearest Social Service Office OR apply online at SupportGoWhere
+- AND hotline: 1800 222 0000
 - AND source: msf.gov.sg/comcare
 
 ---
