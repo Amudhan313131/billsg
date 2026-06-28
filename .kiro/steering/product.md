@@ -10,12 +10,26 @@ Singapore has 12+ overlapping healthcare schemes. Most patients receive only wha
 Any Singaporean who has received a public hospital bill they don't understand. Primary persona: Uncle Tan, 68 years old, Pioneer Generation, just discharged from SGH with a $12,000 bill, no idea what any of it means.
 
 ## Core User Flow
+
+### Path A — Eligibility Check Only
 1. Onboarding — 4-5 fields to build entitlement profile
-2. Upload Bill — photo or PDF of Singapore public hospital bill
-3. Explain My Bill — every line item explained in plain English
-4. Match Schemes — unclaimed schemes identified and matched
-5. Summary Banner — "You may be eligible to claim up to $X across N schemes"
+2. Dashboard — shows all schemes user qualifies for based on profile alone
+3. User reads and leaves — no bill upload required
+
+### Path B — Full Bill Analysis
+1. Onboarding — 4-5 fields to build entitlement profile
+2. Dashboard — shows all schemes user qualifies for based on profile alone
+3. Explain My Bill — upload bill → Textract → every line item explained in plain English
+4. Match Schemes — unlocks after bill is explained. Scheme Matching Agent queries MCP Server → personalised scheme cards in 3 columns: ✅ Already Applied / ⚠️ Unclaimed / ❌ Not Applicable
+5. Summary Banner — auto-appears after matching: "You may be eligible to claim up to $X across N schemes"
 6. Action Plan — exactly where to go, what to bring, what to say
+7. Disclaimer — shown on every output: "This is guidance only. Always consult a Medical Social Worker before taking action."
+
+## Key Design Decisions
+- No login required — session-based only, no sensitive data stored
+- Sequential in Path B — Match Schemes only unlocks after bill is explained
+- Dashboard is a natural exit point — Path A users get value without uploading anything
+- Match Schemes without bill = profile-only matching with banner prompting bill upload
 
 ## AI Behaviour Rules — The Agent Must Always Follow These
 1. Never guarantee eligibility for any scheme — always say "you may qualify" not "you qualify"
