@@ -219,15 +219,18 @@ interface SchemeMatch {
 ---
 
 ## Scheme 12 — ElderFund
-**What it is:** Financial assistance for severely disabled elderly Singaporeans with low income.
+**What it is:** Discretionary assistance for lower-income, severely disabled Singapore Citizens aged 30+ for long-term care needs. Payout up to $250/month.
 
 **Acceptance Criteria:**
 - GIVEN citizenship = SC
 - AND age >= 30
 - AND monthly_pchi <= 1500
+- AND MediSave balance < $10,000
+- AND requires full assistance with at least 3 of 6 Activities of Daily Living
+- AND NOT a CareShield Life or ElderShield policyholder
 - THEN status = unclaimed
-- AND action: Apply via Agency for Integrated Care (AIC)
-- AND call: 1800-650-6060
+- AND note: Applications considered case-by-case even if income criteria not met
+- AND action: Apply online via AIC eFASS at aic.sg or email apply@aic.sg
 - AND source: aic.sg/financial-assistance/elderfund
 
 ---
