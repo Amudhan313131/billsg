@@ -261,6 +261,15 @@ THEN:
 Prioritise MediFund Silver (if eligible) at top of unclaimed list
 Show urgent callout: "Your remaining bill is significant. A Medical Social Worker can help explore all available assistance options."
 
+### Edge Case 11 — Scheme Threshold Changed Since Last Visit
+IF user revisits app after scraper has updated MCP server with new thresholds
+THEN:
+- Rules engine uses NEW thresholds from MCP server
+- Results may differ from previous visit
+- Show notice: "Scheme eligibility criteria are updated regularly. Results reflect the latest available data as of {last_scraped date}."
+- Never cache scheme match results across sessions
+- Always show source URL and verified date on every scheme card
+
 ## Acceptance Criteria
 
 - GIVEN SC, age 68, Pioneer Generation, PCHI $1,200, Class C bill, pioneer_merdeka_discount = 0
