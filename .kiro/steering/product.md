@@ -11,33 +11,54 @@ Any Singaporean who has received a public hospital bill they don't understand. P
 
 ## Core User Flow
 
-### Path A — Eligibility Check Only
-1. Onboarding — 4-5 fields to build entitlement profile
-2. Dashboard — shows all schemes user qualifies for based on profile alone
-3. User reads and leaves — no bill upload required
+### Phase 1 — Onboarding
+User answers 4-5 questions: citizenship, age, monthly PCHI, annual value of home, Pioneer/Merdeka status, IP rider status.
+Rules engine runs eligibility_matrix.md against profile.
+Output: Entitlement Dashboard showing all schemes user qualifies for based on profile alone.
+This is Path A complete — user can stop here if they only want eligibility information.
 
-### Path B — Full Bill Analysis
-1. Onboarding — 4-5 fields to build entitlement profile
-2. Dashboard — shows all schemes user qualifies for based on profile alone
-3. Explain My Bill — upload bill → Textract → every line item explained in plain English
-4. Match Schemes — unlocks after bill is explained. Scheme Matching Agent queries MCP Server → personalised scheme cards in 3 columns: ✅ Already Applied / ⚠️ Unclaimed / ❌ Not Applicable
-5. Summary Banner — auto-appears after matching: "You may be eligible to claim up to $X across N schemes"
-6. Action Plan — exactly where to go, what to bring, what to say
-7. Disclaimer — shown on every output: "This is guidance only. Always consult a Medical Social Worker before taking action."
+### Phase 2 — Bill Upload
+User uploads photo or PDF of Singapore public hospital bill.
+AWS S3 stores the file. AWS Textract extracts all text.
+Bill parser maps Textract output to standardised JSON schema.
+Output: ParsedBill object with all line items, ward class, totals. plain_english fields empty at this point.
 
-## AI vs Non-AI Features
+### Phase 3 — Explain My Bill
+Triggered by "Explain My Bill" button.
+LLM (Amazon Bedrock) reads each line item and fills plain_english field.
+April 2026 IP rider check runs — flags restructuring impact if user has IP rider.
+Output: Every line item displayed as before/after card with plain English explanation.
 
-### Path A — Rules Engine Only (No AI)
-Profile fields → deterministic TypeScript eligibility logic → scheme cards displayed on dashboard.
-No LLM involved. Fast, accurate, fully testable. Every result is deterministic.
+### Phase 4 — Match Schemes
+Triggered by "Match Schemes" button — only available after Phase 3.
+Scheme Matching Agent:
+1. Queries MCP Server for current live scheme rules
+2. Runs eligibility_matrix.md logic against user profile
+3. Cross-references with parsed bill — detects missing subsidies
+4. Categorises every scheme: ✅ Already Applied / ⚠️ Unclaimed / ❌ Not Applicable
+5. LLM generates plain English explanation for each scheme
+6. Fills action_plan.md templates for every unclaimed scheme
+7. Calculates total potential assistance amount
 
-### Path B — Rules Engine + AI
-Adds the following AI features on top of Path A:
+Output: Three columns of scheme cards.
 
-- **AWS Textract** — OCR reads the uploaded hospital bill and extracts all line items
-- **LLM (Amazon Bedrock/Claude)** — explains each line item in plain English
-- **Scheme Matching Agent** — Kiro agent that cross-references parsed bill + user profile against MCP Server for personalised scheme matching
-- **Action Plan Generator** — LLM writes specific instructions per unclaimed scheme based on action_plan.md template
+### Phase 5 — Summary Banner + Action Plan
+Auto-appears after scheme matching completes.
+Shows: "You may be eligible to claim up to $X across N schemes."
+User taps to expand — sees full action plan per unclaimed scheme.
+Every output shows disclaimer: "This is guidance only. Always consult a Medical Social Worker before taking action."
+
+## LLM Usage — Two Separate Calls
+Phase 3 (Explain Bill): LLM explains each line item in plain English. Never gives advice.
+Phase 4 (Scheme Matching): LLM generates scheme explanations and fills action plan templates.
+
+## Technology Per Phase
+- Phase 1: Next.js + TypeScript Rules Engine
+- Phase 2: AWS S3 + AWS Textract + Bill Parser
+- Phase 3: Amazon Bedrock (LLM) + Pre-Generation Hook
+- Phase 4: Kiro Scheme Matching Agent + MCP Server + Amazon Bedrock
+- Phase 5: Next.js UI + Action Plan Templates
+- Background: Scraper keeps MCP Server data current from live MOH sources
 
 ### Why This Matters
 Path A users get real value without any AI. Path B users get significantly more accurate and personalised results. AI enhances the product — it is not the entire product. The rules engine is always the source of truth for eligibility. The LLM never overrides it.
