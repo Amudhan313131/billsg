@@ -25,6 +25,23 @@ Any Singaporean who has received a public hospital bill they don't understand. P
 6. Action Plan — exactly where to go, what to bring, what to say
 7. Disclaimer — shown on every output: "This is guidance only. Always consult a Medical Social Worker before taking action."
 
+## AI vs Non-AI Features
+
+### Path A — Rules Engine Only (No AI)
+Profile fields → deterministic TypeScript eligibility logic → scheme cards displayed on dashboard.
+No LLM involved. Fast, accurate, fully testable. Every result is deterministic.
+
+### Path B — Rules Engine + AI
+Adds the following AI features on top of Path A:
+
+- **AWS Textract** — OCR reads the uploaded hospital bill and extracts all line items
+- **LLM (Amazon Bedrock/Claude)** — explains each line item in plain English
+- **Scheme Matching Agent** — Kiro agent that cross-references parsed bill + user profile against MCP Server for personalised scheme matching
+- **Action Plan Generator** — LLM writes specific instructions per unclaimed scheme based on action_plan.md template
+
+### Why This Matters
+Path A users get real value without any AI. Path B users get significantly more accurate and personalised results. AI enhances the product — it is not the entire product. The rules engine is always the source of truth for eligibility. The LLM never overrides it.
+
 ## Key Design Decisions
 - No login required — session-based only, no sensitive data stored
 - Sequential in Path B — Match Schemes only unlocks after bill is explained
