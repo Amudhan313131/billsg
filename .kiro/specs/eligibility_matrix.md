@@ -37,23 +37,42 @@ interface SchemeMatch {
 ```
 
 ## Scheme 1 — Government Subsidy
-**What it is:** Means-tested subsidy applied automatically on admission to subsidised ward.
+**What it is:** Means-tested subsidy applied automatically on admission to subsidised ward. No application required.
+**Effective: 1 October 2024**
 
-| Condition | Subsidy Rate |
+**B2/C Ward — Singapore Citizen:**
+| PCHI | Subsidy Rate |
 |---|---|
-| SC, PCHI ≤ $1,500 | Up to 80% |
-| SC, PCHI $1,501–$2,100 | Up to 75% |
-| SC, PCHI $2,101–$2,800 | Up to 70% |
-| SC, PCHI $2,801–$3,600 | Up to 60% |
-| SC, PCHI $3,601–$5,000 | Up to 50% |
-| SC, PCHI > $5,000 | Up to 30% |
-| PR | Up to 50% lower tier |
-| Foreigner | No subsidy |
+| No PCHI, AV ≤ $21,000 | 80% |
+| No PCHI, AV > $21,000 | 50% |
+| $0 < PCHI ≤ $2,100 | 80% |
+| $2,100 < PCHI ≤ $2,300 | 75% |
+| $2,300 < PCHI ≤ $2,600 | 70% |
+| $2,600 < PCHI ≤ $3,000 | 65% |
+| $3,000 < PCHI ≤ $3,300 | 60% |
+| $3,300 < PCHI ≤ $3,600 | 55% |
+| PCHI > $3,600 | 50% |
+
+**B2/C Ward — Permanent Resident:**
+| PCHI | Subsidy Rate |
+|---|---|
+| No PCHI, AV ≤ $21,000 | 50% |
+| No PCHI, AV > $21,000 | 25% |
+| $0 < PCHI ≤ $2,100 | 50% |
+| $2,100 < PCHI ≤ $2,300 | 42.5% |
+| $2,300 < PCHI ≤ $2,600 | 35% |
+| $2,600 < PCHI ≤ $3,000 | 32.5% |
+| $3,000 < PCHI ≤ $3,300 | 30% |
+| $3,300 < PCHI ≤ $3,600 | 27.5% |
+| PCHI > $3,600 | 25% |
+
+**Foreigners:** No subsidy.
 
 **Acceptance Criteria:**
-- GIVEN citizenship = SC AND ward_class IN (B2, C)
+- GIVEN citizenship IN (SC, PR) AND ward_class IN (B2, C)
 - THEN status = auto_applied
-- AND subsidy rate shown based on PCHI bracket
+- AND subsidy rate shown based on PCHI bracket and citizenship
+- AND if PCHI = 0, use Annual Value of home to determine tier
 - AND source: moh.gov.sg/managing-expenses/subsidies-in-public-healthcare
 
 ---
@@ -145,7 +164,11 @@ interface SchemeMatch {
 
 **Acceptance Criteria:**
 - GIVEN citizenship = SC
-- AND is_merdeka = true (born 1950-1959, SC before 31 Dec 1986)
+- AND (
+    (born 1950-1959 AND became SC on or before 31 Dec 1996)
+    OR
+    (born on or before 31 Dec 1949 AND became SC on or before 31 Dec 1996 AND is_pioneer = false)
+  )
 - THEN status = auto_applied (if registered) OR unclaimed (if not registered)
 - AND show: additional 25% off subsidised bill
 - AND action if not registered: Call 1800-2222-888
@@ -253,4 +276,4 @@ interface SchemeMatch {
 - Age < 18 → flag MediFund Junior instead of MediFund Silver
 - PCHI = 0 → treat as lowest income bracket, maximise subsidy matching
 - No IP rider → skip April 2026 flag entirely
-- Pioneer AND Merdeka → impossible, flag as data error, ask user to recheck
+- Pioneer AND Merdeka → only flag as error if is_pioneer = true AND is_merdeka = true simultaneously
