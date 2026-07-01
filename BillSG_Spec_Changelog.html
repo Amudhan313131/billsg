@@ -1,0 +1,273 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>BillSG Spec Changelog</title>
+<style>
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  body { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif; font-size: 14px; line-height: 1.6; color: #1a1a1a; background: #f7f7f7; }
+  .page { max-width: 900px; margin: 40px auto; background: #fff; padding: 56px 64px; box-shadow: 0 2px 16px rgba(0,0,0,.10); border-radius: 6px; }
+  h1.doc-title { font-size: 28px; font-weight: 700; color: #1a1a1a; text-align: center; margin-bottom: 6px; }
+  .subtitle { text-align: center; color: #555; margin-bottom: 4px; }
+  .meta { text-align: center; color: #888; font-size: 12px; margin-bottom: 36px; }
+  hr { border: none; border-top: 1px solid #e0e0e0; margin: 32px 0; }
+  h2.section { font-size: 20px; font-weight: 700; color: #1a1a1a; margin: 40px 0 16px; padding-bottom: 8px; border-bottom: 2px solid #1a1a1a; }
+  h3.issue { font-size: 15px; font-weight: 700; margin: 28px 0 6px; color: #1a1a1a; }
+  h3.issue .tag-crit { background: #fdecea; color: #c0392b; border-radius: 4px; padding: 1px 7px; font-size: 12px; font-weight: 700; margin-right: 6px; }
+  h3.issue .tag-minor { background: #e8f4fd; color: #1a6b9a; border-radius: 4px; padding: 1px 7px; font-size: 12px; font-weight: 700; margin-right: 6px; }
+  .file-tag { font-size: 11px; color: #666; font-family: 'SF Mono', Menlo, monospace; background: #f0f0f0; border-radius: 3px; padding: 1px 5px; margin: 0 3px; }
+  .desc { color: #333; margin-bottom: 10px; }
+  .diff { background: #f8f8f8; border-radius: 5px; border: 1px solid #e0e0e0; overflow: hidden; margin: 8px 0 4px; }
+  .diff-row { display: flex; }
+  .diff-label { width: 70px; min-width: 70px; font-size: 11px; font-weight: 700; padding: 8px 10px; display: flex; align-items: flex-start; }
+  .diff-before .diff-label { color: #c0392b; background: #fdecea; border-right: 3px solid #e74c3c; }
+  .diff-after  .diff-label { color: #1a7a3c; background: #e9f7ef; border-right: 3px solid #27ae60; }
+  .diff-before { border-bottom: 1px solid #e0e0e0; }
+  .diff-content { padding: 8px 12px; font-family: 'SF Mono', Menlo, monospace; font-size: 12px; white-space: pre-wrap; word-break: break-word; line-height: 1.5; color: #333; }
+  .file-list { margin: 12px 0; }
+  .file-list li { list-style: none; padding: 5px 0; border-bottom: 1px solid #f0f0f0; display: flex; align-items: baseline; gap: 10px; }
+  .file-list li:last-child { border-bottom: none; }
+  .fname { font-family: 'SF Mono', Menlo, monospace; font-size: 12px; color: #1a1a1a; flex: 1; }
+  .issues-badge { font-size: 11px; color: #555; white-space: nowrap; }
+  .footer-note { background: #fffbe6; border: 1px solid #ffe58f; border-radius: 5px; padding: 12px 16px; color: #7a5f00; font-size: 13px; margin-top: 32px; }
+  .summary-box { background: #f0f4ff; border: 1px solid #c5d0f0; border-radius: 5px; padding: 14px 18px; margin-bottom: 28px; }
+  .summary-box p { color: #333; margin-bottom: 6px; }
+  .summary-box p:last-child { margin-bottom: 0; }
+  @media print {
+    body { background: #fff; }
+    .page { box-shadow: none; padding: 20px; max-width: 100%; }
+  }
+</style>
+</head>
+<body>
+<div class="page">
+
+<h1 class="doc-title">BillSG Spec Audit — Change Log</h1>
+<p class="subtitle">Kiro BuildFest 2026 &nbsp;·&nbsp; Team Amudhan &amp; Raghul</p>
+<p class="meta">Generated: 2026-07-01 &nbsp;|&nbsp; Branch: raghul/specs</p>
+<hr>
+
+<div class="summary-box">
+  <p>A deep audit of all 24 Kiro-generated subfolder spec files (<code>.kiro/specs/*/requirements.md</code>, <code>design.md</code>, <code>tasks.md</code>) was conducted against the 5 original committed flat specs and 2 steering docs.</p>
+  <p>The audit found <strong>10 critical issues</strong> and <strong>10 minor issues</strong>. All 20 were fixed in this session across 12 spec files.</p>
+</div>
+
+<!-- ══════════════ CRITICAL ══════════════ -->
+<h2 class="section">Critical Issues (C1 – C10)</h2>
+
+<h3 class="issue"><span class="tag-crit">C1</span> Merdeka Generation year typo + missing second arm</h3>
+<p class="desc">Files: <span class="file-tag">eligibility-matrix/design.md</span> <span class="file-tag">eligibility-matrix/requirements.md</span></p>
+<div class="diff">
+  <div class="diff-row diff-before"><div class="diff-label">Before</div><div class="diff-content">is_merdeka: boolean  // Born 1950-1959, SC before 31 Dec 1986</div></div>
+  <div class="diff-row diff-after"><div class="diff-label">After</div><div class="diff-content">is_merdeka: boolean  // Born 1950-1959, SC before 31 Dec 1996
+                      // (or Born ≤ 1949, not Pioneer, SC before 31 Dec 1996)</div></div>
+</div>
+<p class="desc">In requirements.md Req 9, added AC3 documenting both Merdeka arms: (a) Born 1950–1959 AND SC by 31 Dec 1996, OR (b) Born before 1950, not Pioneer, AND SC by 31 Dec 1996.</p>
+
+<h3 class="issue"><span class="tag-crit">C2</span> ElderFund missing CareShield Life / ElderShield exclusion</h3>
+<p class="desc">Files: <span class="file-tag">eligibility-matrix/design.md</span> <span class="file-tag">eligibility-matrix/requirements.md</span></p>
+<div class="diff">
+  <div class="diff-row diff-before"><div class="diff-label">Before</div><div class="diff-content">Req 13 AC1: "…AND MediSave &lt; $10,000 AND needs ADL assistance…"
+design.md item 12: "SC AND age ≥ 30 AND PCHI ≤ 1500"</div></div>
+  <div class="diff-row diff-after"><div class="diff-label">After</div><div class="diff-content">AC1 now includes: "AND NOT a CareShield Life or ElderShield policyholder"
+design.md item 12 updated to match</div></div>
+</div>
+
+<h3 class="issue"><span class="tag-crit">C3</span> ElderFund MediSave balance check missing from design.md &amp; tasks.md</h3>
+<p class="desc">Files: <span class="file-tag">eligibility-matrix/design.md</span> <span class="file-tag">eligibility-matrix/tasks.md</span></p>
+<div class="diff">
+  <div class="diff-row diff-before"><div class="diff-label">Before</div><div class="diff-content">design.md item 12: "SC AND age ≥ 30 AND PCHI ≤ 1500"
+tasks.md Task 7 elderfund.ts: same truncated criteria</div></div>
+  <div class="diff-row diff-after"><div class="diff-label">After</div><div class="diff-content">design.md item 12: added "AND MediSave balance &lt; $10,000"
+tasks.md Task 7: bullet updated to include the MediSave balance check</div></div>
+</div>
+
+<h3 class="issue"><span class="tag-crit">C4</span> ElderFund ADL qualifier imprecise, payout amount missing</h3>
+<p class="desc">Files: <span class="file-tag">eligibility-matrix/requirements.md</span></p>
+<div class="diff">
+  <div class="diff-row diff-before"><div class="diff-label">Before</div><div class="diff-content">AC1: "needs ADL assistance"  (no ADL count specified, no payout stated)</div></div>
+  <div class="diff-row diff-after"><div class="diff-label">After</div><div class="diff-content">AC1: "requires full assistance with at least 3 of 6 Activities of Daily Living"
+New AC3: "GIVEN ElderFund unclaimed THEN payout up to $250/month (subject to assessment)"</div></div>
+</div>
+
+<h3 class="issue"><span class="tag-crit">C5</span> ComCare PR eligibility missing SC family member condition</h3>
+<p class="desc">Files: <span class="file-tag">eligibility-matrix/design.md</span> <span class="file-tag">eligibility-matrix/requirements.md</span></p>
+<div class="diff">
+  <div class="diff-row diff-before"><div class="diff-label">Before</div><div class="diff-content">design.md item 13: "ComCare — unclaimed if SC/PR AND PCHI ≤ 800…"
+Req 14 AC1: "GIVEN citizenship IN (SC, PR) AND monthly_pchi &lt;= 800…"</div></div>
+  <div class="diff-row diff-after"><div class="diff-label">After</div><div class="diff-content">design.md item 13: "…for PR: SMTA only, requires at least one SC family member in household"
+Req 14: split into AC1 (SC rule) and AC2 (PR SMTA with SC family member condition)</div></div>
+</div>
+
+<h3 class="issue"><span class="tag-crit">C6</span> MediShield Life "once per policy year" deductible rule missing</h3>
+<p class="desc">Files: <span class="file-tag">eligibility-matrix/requirements.md</span></p>
+<div class="diff">
+  <div class="diff-row diff-before"><div class="diff-label">Before</div><div class="diff-content">Req 3 had 6 acceptance criteria; no mention of once-per-year deductible rule</div></div>
+  <div class="diff-row diff-after"><div class="diff-label">After</div><div class="diff-content">Added AC7: "GIVEN MediShield Life deductible WHEN same policy year AND multiple
+hospital admissions THEN deductible is paid only once per policy year (not per admission)"</div></div>
+</div>
+
+<h3 class="issue"><span class="tag-crit">C7</span> bill-explainer ward_class=unknown contradiction between requirements.md and design.md</h3>
+<p class="desc">Files: <span class="file-tag">bill-explainer/requirements.md</span></p>
+<p class="desc">design.md (Pre-Generation Hook) correctly states: ward_class unknown → skip item with fallback message. requirements.md Req 4 AC3 said the opposite — "items still processed". Fixed requirements.md to match design.md.</p>
+<div class="diff">
+  <div class="diff-row diff-before"><div class="diff-label">Before</div><div class="diff-content">Req 4 AC3: "GIVEN ward_class = 'unknown' WHEN hook runs
+THEN items still processed (warning shown separately)"</div></div>
+  <div class="diff-row diff-after"><div class="diff-label">After</div><div class="diff-content">Req 4 AC3: "GIVEN ward_class = 'unknown' WHEN hook runs
+THEN skip all items with plain_english = 'Could not explain this item.
+Please check your original bill.'"</div></div>
+</div>
+
+<h3 class="issue"><span class="tag-crit">C8</span> scheme-matcher/requirements.md missing all 20 end-to-end scenario test cases</h3>
+<p class="desc">Files: <span class="file-tag">scheme-matcher/requirements.md</span></p>
+<p class="desc">The original flat spec (scheme_matcher.md) contained 20 GIVEN/WHEN/THEN persona scenarios — Uncle Tan (Pioneer), PR age 45, Foreigner, private hospital, PCHI=0, age 15 (MediFund Junior), urgent &gt;$10K callout, IP rider, Path A, boundary age 18, etc. None were carried over into the new subfolder requirements.md.</p>
+<div class="diff">
+  <div class="diff-row diff-before"><div class="diff-label">Before</div><div class="diff-content">Req 10 had 9 edge-case ACs; no scenario-based test matrix</div></div>
+  <div class="diff-row diff-after"><div class="diff-label">After</div><div class="diff-content">Added Requirement 11 "Acceptance Test Scenarios" with all 20 GIVEN/WHEN/THEN
+scenarios restored verbatim from the original flat spec (retrieved via git show)</div></div>
+</div>
+
+<h3 class="issue"><span class="tag-crit">C9</span> CHAS Orange Annual Value range missing from scraper extracted data</h3>
+<p class="desc">Files: <span class="file-tag">scraper/design.md</span></p>
+<div class="diff">
+  <div class="diff-row diff-before"><div class="diff-label">Before</div><div class="diff-content">{ "blue_pchi_max": 1500, "blue_av_max": 21000,
+  "orange_pchi_min": 1501, "orange_pchi_max": 2300,
+  "green_pchi_min": 2301, "applies_to": ["SC"] }</div></div>
+  <div class="diff-row diff-after"><div class="diff-label">After</div><div class="diff-content">{ "blue_pchi_max": 1500, "blue_av_max": 21000,
+  "orange_pchi_min": 1501, "orange_pchi_max": 2300,
+  "orange_av_min": 21001, "orange_av_max": 31000,
+  "green_pchi_min": 2301, "applies_to": ["SC"] }</div></div>
+</div>
+
+<h3 class="issue"><span class="tag-crit">C10</span> action-plan dead code in getActionPlan() function</h3>
+<p class="desc">Files: <span class="file-tag">action-plan/design.md</span></p>
+<p class="desc">The second guard <code>if (scheme_id === 'medifund_junior' &amp;&amp; userProfile.age &gt;= 18)</code> is unreachable: the eligibility matrix only ever assigns <code>medifund_junior</code> when age &lt; 18. If executed it would silently return the wrong template.</p>
+<div class="diff">
+  <div class="diff-row diff-before"><div class="diff-label">Before</div><div class="diff-content">if (scheme_id === 'medifund_silver' &amp;&amp; userProfile.age &lt; 18) return TEMPLATES['medifund_junior']
+if (scheme_id === 'medifund_junior' &amp;&amp; userProfile.age &gt;= 18) return TEMPLATES['medifund']  // dead code
+return TEMPLATES[scheme_id] ?? null</div></div>
+  <div class="diff-row diff-after"><div class="diff-label">After</div><div class="diff-content">if (scheme_id === 'medifund_silver' &amp;&amp; userProfile.age &lt; 18) return TEMPLATES['medifund_junior']
+return TEMPLATES[scheme_id] ?? null
+// dead code guard removed — medifund_junior is only assigned when age &lt; 18</div></div>
+</div>
+
+<!-- ══════════════ MINOR ══════════════ -->
+<h2 class="section">Minor Issues (M1 – M10)</h2>
+
+<h3 class="issue"><span class="tag-minor">M1</span> Government Subsidy effective date not documented</h3>
+<p class="desc">Files: <span class="file-tag">eligibility-matrix/requirements.md</span></p>
+<div class="diff">
+  <div class="diff-row diff-before"><div class="diff-label">Before</div><div class="diff-content">Req 2 had no effective date for the subsidy tier structure</div></div>
+  <div class="diff-row diff-after"><div class="diff-label">After</div><div class="diff-content">Added "Effective: 1 October 2024" note to Req 2 user story</div></div>
+</div>
+
+<h3 class="issue"><span class="tag-minor">M2</span> ComCare LTA cash amounts not specified</h3>
+<p class="desc">Files: <span class="file-tag">eligibility-matrix/requirements.md</span></p>
+<div class="diff">
+  <div class="diff-row diff-before"><div class="diff-label">Before</div><div class="diff-content">Req 14 AC3: "GIVEN LTA type THEN action: Visit any Social Service Office"
+(no dollar amounts)</div></div>
+  <div class="diff-row diff-after"><div class="diff-label">After</div><div class="diff-content">Added AC4: "GIVEN LTA type THEN cash assistance $760–$2,230/month
+(from April 2025, based on household size and income)"</div></div>
+</div>
+
+<h3 class="issue"><span class="tag-minor">M3</span> ComCare above-$800 PCHI case-by-case note missing from scheme-matcher</h3>
+<p class="desc">Files: <span class="file-tag">scheme-matcher/requirements.md</span></p>
+<div class="diff">
+  <div class="diff-row diff-before"><div class="diff-label">Before</div><div class="diff-content">Req 4 AC7: "GIVEN final_payable > 500 AND monthly_pchi &lt;= 1000 THEN flag ComCare"
+(no mention of case-by-case assessment above $800)</div></div>
+  <div class="diff-row diff-after"><div class="diff-label">After</div><div class="diff-content">Added AC8: "GIVEN monthly_pchi slightly above $800 (up to ~$1,000) THEN still
+flag ComCare as unclaimed — eligibility is assessed case-by-case; patients near
+the threshold should still apply"</div></div>
+</div>
+
+<h3 class="issue"><span class="tag-minor">M4</span> app/match/page.tsx dual-ownership ambiguity</h3>
+<p class="desc">Files: <span class="file-tag">scheme-matcher/tasks.md</span> <span class="file-tag">ui-flow/tasks.md</span></p>
+<div class="diff">
+  <div class="diff-row diff-before"><div class="diff-label">Before</div><div class="diff-content">Both Task 9 (scheme-matcher) and Task 4 (ui-flow) listed "Create app/match/page.tsx"
+with no clarification on which spec owns what</div></div>
+  <div class="diff-row diff-after"><div class="diff-label">After</div><div class="diff-content">Both now include ownership comment:
+"ui-flow owns the page UI layout; scheme-matcher owns the API route
+(app/api/match-schemes/route.ts) and all lib/scheme-matcher/ logic"</div></div>
+</div>
+
+<h3 class="issue"><span class="tag-minor">M5</span> app/explain/page.tsx dual-ownership ambiguity</h3>
+<p class="desc">Files: <span class="file-tag">bill-explainer/tasks.md</span> <span class="file-tag">ui-flow/tasks.md</span></p>
+<div class="diff">
+  <div class="diff-row diff-before"><div class="diff-label">Before</div><div class="diff-content">Both Task 5 (bill-explainer) and Task 3 (ui-flow) listed "Create app/explain/page.tsx"
+with no clarification</div></div>
+  <div class="diff-row diff-after"><div class="diff-label">After</div><div class="diff-content">Both now include ownership comment:
+"ui-flow owns the page UI layout; bill-explainer owns the API route
+(app/api/explain-bill/route.ts) and all lib/bill-explainer/ logic"</div></div>
+</div>
+
+<h3 class="issue"><span class="tag-minor">M6</span> MediSave secondary source URL missing from scraper</h3>
+<p class="desc">Files: <span class="file-tag">scraper/design.md</span></p>
+<div class="diff">
+  <div class="diff-row diff-before"><div class="diff-label">Before</div><div class="diff-content">No MediSave section in "Extracted Data Points Per Scheme"</div></div>
+  <div class="diff-row diff-after"><div class="diff-label">After</div><div class="diff-content">Added MediSave section with:
+  Primary: moh.gov.sg/managing-expenses/schemes-and-subsidies/medisave/
+  Secondary: cpf.gov.sg/member/healthcare-financing/medisave
+  (CPF Board is the authoritative source for withdrawal limit tables)</div></div>
+</div>
+
+<h3 class="issue"><span class="tag-minor">M7</span> schemes_updated: 11 vs 14 total schemes — ambiguous count</h3>
+<p class="desc">Files: <span class="file-tag">scraper/design.md</span></p>
+<div class="diff">
+  <div class="diff-row diff-before"><div class="diff-label">Before</div><div class="diff-content">Response format: { success: true, schemes_updated: 11, timestamp: ... }
+(no explanation — could be confused with the 14-scheme total count)</div></div>
+  <div class="diff-row diff-after"><div class="diff-label">After</div><div class="diff-content">Added note: "schemes_updated: 11 refers to the number of government pages
+scraped (11 URLs), not the total count of healthcare schemes (14)"</div></div>
+</div>
+
+<h3 class="issue"><span class="tag-minor">M8</span> Three disclaimer variants look like duplication (they are intentional)</h3>
+<p class="desc">Files: <span class="file-tag">ui-flow/design.md</span></p>
+<div class="diff">
+  <div class="diff-row diff-before"><div class="diff-label">Before</div><div class="diff-content">Three different disclaimer strings listed with no justification for the differences</div></div>
+  <div class="diff-row diff-after"><div class="diff-label">After</div><div class="diff-content">Added note: "The three disclaimer variants are intentionally different — each is
+sourced from its respective spec and calibrated to that page's context.
+Do not consolidate into a single disclaimer."</div></div>
+</div>
+
+<h3 class="issue"><span class="tag-minor">M9</span> onboarding/tasks.md missing app/api/onboarding/route.ts task</h3>
+<p class="desc">Files: <span class="file-tag">onboarding/tasks.md</span></p>
+<div class="diff">
+  <div class="diff-row diff-before"><div class="diff-label">Before</div><div class="diff-content">Tasks 1–10 covered wizard UI and dashboard only; no server-side session API task</div></div>
+  <div class="diff-row diff-after"><div class="diff-label">After</div><div class="diff-content">Added Task 11: Create app/api/onboarding/route.ts
+  - Accept POST with OnboardingFormState, return mapped UserProfile
+  - Store UserProfile in server-side session (no persistent storage, no PII logged)
+  - Return session ID for subsequent phase API calls</div></div>
+</div>
+
+<h3 class="issue"><span class="tag-minor">M10</span> Scheme count "14" inconsistent with product.md "12+"</h3>
+<p class="desc">Files: <span class="file-tag">eligibility-matrix/requirements.md</span></p>
+<div class="diff">
+  <div class="diff-row diff-before"><div class="diff-label">Before</div><div class="diff-content">Overview: "all 14 Singapore healthcare schemes" (unexplained discrepancy with product.md)</div></div>
+  <div class="diff-row diff-after"><div class="diff-label">After</div><div class="diff-content">Added note: "product.md originally referenced '12+ schemes' — the count expanded
+to 14 during spec refinement"</div></div>
+</div>
+
+<!-- ══════════════ FILE INDEX ══════════════ -->
+<h2 class="section">Files Modified (12 total)</h2>
+<ul class="file-list">
+  <li><span class="fname">.kiro/specs/eligibility-matrix/design.md</span><span class="issues-badge">C1, C2, C3, C4, C5</span></li>
+  <li><span class="fname">.kiro/specs/eligibility-matrix/requirements.md</span><span class="issues-badge">C1, C2, C4, C5, C6, M1, M2, M10</span></li>
+  <li><span class="fname">.kiro/specs/eligibility-matrix/tasks.md</span><span class="issues-badge">C3</span></li>
+  <li><span class="fname">.kiro/specs/bill-explainer/requirements.md</span><span class="issues-badge">C7</span></li>
+  <li><span class="fname">.kiro/specs/bill-explainer/tasks.md</span><span class="issues-badge">M5</span></li>
+  <li><span class="fname">.kiro/specs/scheme-matcher/requirements.md</span><span class="issues-badge">C8, M3</span></li>
+  <li><span class="fname">.kiro/specs/scheme-matcher/tasks.md</span><span class="issues-badge">M4</span></li>
+  <li><span class="fname">.kiro/specs/scraper/design.md</span><span class="issues-badge">C9, M6, M7</span></li>
+  <li><span class="fname">.kiro/specs/action-plan/design.md</span><span class="issues-badge">C10</span></li>
+  <li><span class="fname">.kiro/specs/onboarding/tasks.md</span><span class="issues-badge">M9</span></li>
+  <li><span class="fname">.kiro/specs/ui-flow/tasks.md</span><span class="issues-badge">M4, M5</span></li>
+  <li><span class="fname">.kiro/specs/ui-flow/design.md</span><span class="issues-badge">M8</span></li>
+</ul>
+
+<div class="footer-note">
+  No changes were made to <code>.kiro/steering/</code>, source code, or any file outside <code>.kiro/specs/</code>. All Kiro spec linter warnings (missing ## Architecture, ## Data Models, etc.) are pre-existing across all spec files and were not introduced by these fixes.
+</div>
+
+</div>
+</body>
+</html>
