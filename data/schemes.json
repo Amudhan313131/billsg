@@ -1,0 +1,197 @@
+{
+  "last_full_scrape": "2026-07-02T00:00:00.000Z",
+  "schemes": [
+    {
+      "scheme_id": "government-subsidy",
+      "scheme_name": "Government Subsidy (Acute Inpatient)",
+      "source_url": "https://www.moh.gov.sg/managing-expenses/schemes-and-subsidies/subsidies-for-acute-inpatient-care-at-public-healthcare-institutions/",
+      "last_scraped": "2026-07-02T00:00:00.000Z",
+      "data_freshness": "current",
+      "data": {
+        "sc_tiers": [
+          { "pchi_max": 2100, "av_max": 21000, "subsidy_pct": 80 },
+          { "pchi_max": 2300, "subsidy_pct": 75 },
+          { "pchi_max": 2600, "subsidy_pct": 70 },
+          { "pchi_max": 3000, "subsidy_pct": 65 },
+          { "pchi_max": 3300, "subsidy_pct": 60 },
+          { "pchi_max": 3600, "subsidy_pct": 55 },
+          { "pchi_max": null, "subsidy_pct": 50 }
+        ],
+        "pr_subsidy_pct": 50,
+        "foreigner_subsidy_pct": 0
+      }
+    },
+    {
+      "scheme_id": "medishield-life",
+      "scheme_name": "MediShield Life",
+      "source_url": "https://www.cpf.gov.sg/member/healthcare-financing/medishield-life/what-medishield-life-covers-you-for",
+      "last_scraped": "2026-07-02T00:00:00.000Z",
+      "data_freshness": "current",
+      "data": {
+        "deductibles": { "C": 1500, "B2": 2000, "B2+": 2000, "B1": 2500, "A": 3500 },
+        "coinsurance_pct": 10,
+        "annual_claim_limit": 200000,
+        "applies_to": ["SC", "PR"]
+      }
+    },
+    {
+      "scheme_id": "chas-blue",
+      "scheme_name": "CHAS Blue",
+      "source_url": "https://www.moh.gov.sg/managing-expenses/schemes-and-subsidies/chas",
+      "last_scraped": "2026-07-02T00:00:00.000Z",
+      "data_freshness": "current",
+      "data": {
+        "pchi_max": 1500,
+        "av_max": 21000,
+        "applies_to": ["SC"]
+      }
+    },
+    {
+      "scheme_id": "chas-orange",
+      "scheme_name": "CHAS Orange",
+      "source_url": "https://www.moh.gov.sg/managing-expenses/schemes-and-subsidies/chas",
+      "last_scraped": "2026-07-02T00:00:00.000Z",
+      "data_freshness": "current",
+      "data": {
+        "pchi_min": 1501,
+        "pchi_max": 2300,
+        "av_min": 21001,
+        "av_max": 31000,
+        "applies_to": ["SC"]
+      }
+    },
+    {
+      "scheme_id": "chas-green",
+      "scheme_name": "CHAS Green",
+      "source_url": "https://www.moh.gov.sg/managing-expenses/schemes-and-subsidies/chas",
+      "last_scraped": "2026-07-02T00:00:00.000Z",
+      "data_freshness": "current",
+      "data": {
+        "applies_to": ["SC"],
+        "note": "All SC eligible regardless of income"
+      }
+    },
+    {
+      "scheme_id": "medifund",
+      "scheme_name": "MediFund",
+      "source_url": "https://www.moh.gov.sg/managing-expenses/schemes-and-subsidies/medifund",
+      "last_scraped": "2026-07-02T00:00:00.000Z",
+      "data_freshness": "current",
+      "data": {
+        "min_age": 18,
+        "applies_to": ["SC"],
+        "requires_difficulty_paying": true
+      }
+    },
+    {
+      "scheme_id": "medifund-silver",
+      "scheme_name": "MediFund Silver",
+      "source_url": "https://www.moh.gov.sg/managing-expenses/schemes-and-subsidies/medifund",
+      "last_scraped": "2026-07-02T00:00:00.000Z",
+      "data_freshness": "current",
+      "data": {
+        "min_age": 65,
+        "applies_to": ["SC"],
+        "requires_difficulty_paying": true
+      }
+    },
+    {
+      "scheme_id": "medifund-junior",
+      "scheme_name": "MediFund Junior",
+      "source_url": "https://www.moh.gov.sg/managing-expenses/schemes-and-subsidies/medifund",
+      "last_scraped": "2026-07-02T00:00:00.000Z",
+      "data_freshness": "current",
+      "data": {
+        "max_age": 17,
+        "applies_to": ["SC"],
+        "requires_difficulty_paying": true
+      }
+    },
+    {
+      "scheme_id": "pioneer-generation",
+      "scheme_name": "Pioneer Generation Package",
+      "source_url": "https://www.moh.gov.sg/managing-expenses/schemes-and-subsidies/pioneer-generation-package",
+      "last_scraped": "2026-07-02T00:00:00.000Z",
+      "data_freshness": "current",
+      "data": {
+        "additional_subsidy_pct": 50,
+        "applies_to": ["SC"],
+        "birth_year_max": 1949
+      }
+    },
+    {
+      "scheme_id": "merdeka-generation",
+      "scheme_name": "Merdeka Generation Package",
+      "source_url": "https://www.moh.gov.sg/managing-expenses/schemes-and-subsidies/merdeka-generation-package",
+      "last_scraped": "2026-07-02T00:00:00.000Z",
+      "data_freshness": "current",
+      "data": {
+        "additional_subsidy_pct": 25,
+        "applies_to": ["SC"],
+        "birth_year_range": [1950, 1959]
+      }
+    },
+    {
+      "scheme_id": "elderfund",
+      "scheme_name": "ElderFund",
+      "source_url": "https://www.aic.sg/financial-assistance/elderfund",
+      "last_scraped": "2026-07-02T00:00:00.000Z",
+      "data_freshness": "current",
+      "data": {
+        "medisave_balance_max": 10000,
+        "requires_adl_assistance": true,
+        "excludes_careshield_eldershield": true,
+        "pchi_max": 1800,
+        "applies_to": ["SC", "PR"]
+      }
+    },
+    {
+      "scheme_id": "comcare",
+      "scheme_name": "ComCare Short-to-Medium Term Assistance",
+      "source_url": "https://supportgowhere.life.gov.sg/schemes/",
+      "last_scraped": "2026-07-02T00:00:00.000Z",
+      "data_freshness": "current",
+      "data": {
+        "pchi_max": 800,
+        "applies_to": ["SC", "PR"],
+        "pr_requires_sc_family_member": true
+      }
+    },
+    {
+      "scheme_id": "flexi-medisave",
+      "scheme_name": "Flexi-MediSave",
+      "source_url": "https://www.cpf.gov.sg/member/healthcare-financing/medisave/flexi-medisave",
+      "last_scraped": "2026-07-02T00:00:00.000Z",
+      "data_freshness": "current",
+      "data": {
+        "min_age": 60,
+        "annual_limit": 400,
+        "applies_to": ["SC", "PR"]
+      }
+    },
+    {
+      "scheme_id": "ip-rider-flag",
+      "scheme_name": "Integrated Shield Plan (IP) Rider",
+      "source_url": "https://www.moh.gov.sg/managing-expenses/schemes-and-subsidies/integrated-shield-plans",
+      "last_scraped": "2026-07-02T00:00:00.000Z",
+      "data_freshness": "current",
+      "data": {
+        "restructuring_date": "2026-04-01",
+        "new_copayment_cap": 6000,
+        "minimum_copayment_pct": 5,
+        "grandfathered_cutoff": "2026-03-31"
+      }
+    },
+    {
+      "scheme_id": "maf",
+      "scheme_name": "Medication Assistance Fund (MAF)",
+      "source_url": "https://www.moh.gov.sg/managing-expenses/schemes-and-subsidies/subsidies-for-drugs-on-the-medication-assistance-fund-(maf)-list-at-public-healthcare-institutions/",
+      "last_scraped": "2026-07-02T00:00:00.000Z",
+      "data_freshness": "current",
+      "data": {
+        "applies_to": ["SC", "PR"],
+        "requires_medication_charges": true
+      }
+    }
+  ]
+}

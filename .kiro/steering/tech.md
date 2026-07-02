@@ -7,6 +7,7 @@
 - File Storage: AWS S3
 - MCP Server: Custom Node.js server exposing Singapore 2026 healthcare policy data
 - Rules Engine: Pure TypeScript — deterministic eligibility logic, no AI
+- Scraper: Node.js + Cheerio — scrapes live MOH/CPF/AIC pages to keep MCP server current
 - Hosting: Vercel (frontend) + AWS Lambda (API routes)
 
 ## Project Structure
@@ -30,7 +31,9 @@ billsg/
 
 │       ├── explain-bill/   # Textract + LLM explanation
 
-│       └── match-schemes/  # Scheme Matching Agent
+│       ├── match-schemes/  # Scheme Matching Agent
+
+│       └── scraper/        # Manual trigger for MCP server update
 
 ├── lib/                    # Core logic
 
@@ -43,6 +46,20 @@ billsg/
 │   └── s3.ts               # AWS S3 integration
 
 ├── mcp-server/             # Custom MCP server
+
+│   ├── index.ts            # MCP server entry point
+
+│   ├── routes.ts           # API endpoints
+
+│   └── data/               # Scheme data JSON files
+
+├── scraper/                # MOH/CPF/AIC data scraper
+
+│   ├── index.ts            # Main scraper entry point
+
+│   ├── sources.ts          # URLs and selectors per scheme
+
+│   └── scheduler.ts        # Scheduled runs
 
 └── .kiro/                  # Kiro specs, steering, hooks, agents
 
@@ -59,9 +76,11 @@ billsg/
 - AWS_REGION
 - BEDROCK_MODEL_ID
 - S3_BUCKET_NAME
+- MCP_SERVER_URL
+- SCRAPER_SCHEDULE
 
 ## Key Constraints
 - Never store sensitive patient data beyond the current session
 - Never log bill contents or personal health information
 - Always show disclaimer on every AI-generated output
-- Bill parsing targets Singapore public hospital bill format only (SGH, TTSH, NUH, SKH, NTFGH)
+- Bill parsing targets Singapore public hospital bill format only (SGH, TTSH, NUH, SKH, NTFGH, CGH)

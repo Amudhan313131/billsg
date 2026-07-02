@@ -1,0 +1,212 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<style>
+  body { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif; max-width: 900px; margin: 40px auto; padding: 0 40px; color: #1a1a2e; font-size: 14px; line-height: 1.6; }
+  h1 { color: #1a1a2e; font-size: 28px; border-bottom: 3px solid #16213e; padding-bottom: 12px; }
+  h2 { color: #16213e; font-size: 18px; margin-top: 32px; border-left: 4px solid #0f3460; padding-left: 12px; }
+  h3 { color: #0f3460; font-size: 15px; margin-top: 20px; }
+  table { width: 100%; border-collapse: collapse; margin: 12px 0; font-size: 13px; }
+  th { background: #16213e; color: white; padding: 8px 12px; text-align: left; }
+  td { padding: 7px 12px; border-bottom: 1px solid #e0e0e0; }
+  tr:nth-child(even) { background: #f8f9fa; }
+  .badge { display: inline-block; padding: 2px 8px; border-radius: 4px; font-size: 12px; font-weight: 600; }
+  .critical { background: #fee2e2; color: #dc2626; }
+  .minor { background: #fef9c3; color: #ca8a04; }
+  .clean { background: #dcfce7; color: #16a34a; }
+  .meta { color: #6b7280; font-size: 13px; margin-bottom: 32px; }
+  .summary-box { background: #f0f4ff; border: 1px solid #c7d2fe; border-radius: 8px; padding: 16px 20px; margin: 20px 0; }
+  ul { margin: 6px 0; padding-left: 20px; }
+  li { margin: 3px 0; }
+  code { background: #f1f5f9; padding: 1px 5px; border-radius: 3px; font-family: 'SF Mono', Consolas, monospace; font-size: 12px; }
+  .section-divider { border: none; border-top: 1px solid #e5e7eb; margin: 28px 0; }
+</style>
+</head>
+<body>
+
+<h1>BillSG — Change Documentation</h1>
+<p class="meta">Kiro BuildFest 2026 | Team: Amudhan & Raghul | Generated: 1 July 2026</p>
+
+<div class="summary-box">
+  <strong>Summary:</strong> 56 files changed, 5,866 lines added. Covers spec reorganisation (20 fixes), full eligibility rules engine (16 schemes), integration test suite (18 scenarios), and onboarding API.
+</div>
+
+<h2>1. Spec Reorganisation</h2>
+<p>All flat spec files were replaced with structured subfolders. Each spec now has three files: <code>design.md</code>, <code>requirements.md</code>, <code>tasks.md</code>.</p>
+
+<table>
+  <tr><th>Old File</th><th>New Location</th><th>Status</th></tr>
+  <tr><td><code>eligibility_matrix.md</code></td><td><code>.kiro/specs/eligibility-matrix/</code></td><td><span class="badge clean">Migrated + Fixed</span></td></tr>
+  <tr><td><code>bill_parser.md</code></td><td><code>.kiro/specs/bill-parser/</code></td><td><span class="badge clean">Migrated</span></td></tr>
+  <tr><td><code>bill_explainer.md</code></td><td><code>.kiro/specs/bill-explainer/</code></td><td><span class="badge clean">Migrated + Fixed</span></td></tr>
+  <tr><td><code>scheme_matcher.md</code></td><td><code>.kiro/specs/scheme-matcher/</code></td><td><span class="badge clean">Migrated + Fixed</span></td></tr>
+  <tr><td><code>scraper.md</code></td><td><code>.kiro/specs/scraper/</code></td><td><span class="badge clean">Migrated + Fixed</span></td></tr>
+  <tr><td><em>(new)</em></td><td><code>.kiro/specs/onboarding/</code></td><td><span class="badge clean">New</span></td></tr>
+  <tr><td><em>(new)</em></td><td><code>.kiro/specs/ui-flow/</code></td><td><span class="badge clean">New</span></td></tr>
+  <tr><td><em>(new)</em></td><td><code>.kiro/specs/action-plan/</code></td><td><span class="badge clean">New</span></td></tr>
+</table>
+
+<hr class="section-divider">
+
+<h2>2. Spec Fixes (20 Total)</h2>
+
+<h3>eligibility-matrix/design.md</h3>
+<table>
+  <tr><th>Type</th><th>Fix</th></tr>
+  <tr><td><span class="badge critical">Critical</span></td><td>Merdeka year corrected: 1986 → 1996, added second eligibility arm (Born ≤ 1949, not Pioneer, SC before 31 Dec 1996)</td></tr>
+  <tr><td><span class="badge critical">Critical</span></td><td>ElderFund: added CareShield Life exclusion as mandatory condition</td></tr>
+  <tr><td><span class="badge critical">Critical</span></td><td>ElderFund: MediSave balance threshold <code>&lt; $10,000</code> added</td></tr>
+  <tr><td><span class="badge critical">Critical</span></td><td>ElderFund: ADL wording made precise — at least 3 of 6 ADLs, payout up to $250/month</td></tr>
+  <tr><td><span class="badge critical">Critical</span></td><td>ComCare PR: SC family member in household required for SMTA eligibility</td></tr>
+</table>
+
+<h3>eligibility-matrix/requirements.md</h3>
+<table>
+  <tr><th>Type</th><th>Fix</th></tr>
+  <tr><td><span class="badge critical">Critical</span></td><td>Merdeka AC3 corrected to 1996 cutoff</td></tr>
+  <tr><td><span class="badge critical">Critical</span></td><td>CareShield added to ElderFund AC1</td></tr>
+  <tr><td><span class="badge critical">Critical</span></td><td>ADL precision + AC3 payout ($250/month) added</td></tr>
+  <tr><td><span class="badge critical">Critical</span></td><td>PR ComCare AC2: SC family member condition added</td></tr>
+  <tr><td><span class="badge critical">Critical</span></td><td>MediShield once-per-year deductible rule added to AC7</td></tr>
+  <tr><td><span class="badge minor">Minor</span></td><td>Effective date added: 1 October 2024</td></tr>
+  <tr><td><span class="badge minor">Minor</span></td><td>ComCare LTA cash amounts added to AC4 ($760–$2,230/month)</td></tr>
+  <tr><td><span class="badge minor">Minor</span></td><td>Scheme count note updated: 12+ → 14 schemes</td></tr>
+</table>
+
+<h3>eligibility-matrix/tasks.md</h3>
+<table>
+  <tr><th>Type</th><th>Fix</th></tr>
+  <tr><td><span class="badge critical">Critical</span></td><td>ElderFund task: MediSave balance check added</td></tr>
+  <tr><td><span class="badge minor">Minor</span></td><td>Task 2: "middle" → "bottom tier 50%/25%" for PCHI=0 AV &gt; $21,000</td></tr>
+  <tr><td><span class="badge minor">Minor</span></td><td>Task 3: once-per-year bullet added to MediShield deductible</td></tr>
+  <tr><td><span class="badge minor">Minor</span></td><td>Task 7: comcare.ts PR condition — SC family member required</td></tr>
+  <tr><td><span class="badge minor">Minor</span></td><td>Task 9: test cases expanded from 7 to 18</td></tr>
+</table>
+
+<h3>Other Spec Files</h3>
+<table>
+  <tr><th>File</th><th>Type</th><th>Fix</th></tr>
+  <tr><td><code>bill-explainer/requirements.md</code></td><td><span class="badge critical">Critical</span></td><td><code>ward_class=unknown</code> → skip (not process)</td></tr>
+  <tr><td><code>scheme-matcher/requirements.md</code></td><td><span class="badge critical">Critical</span></td><td>Requirement 11 added with 20 test scenarios</td></tr>
+  <tr><td><code>scheme-matcher/requirements.md</code></td><td><span class="badge minor">Minor</span></td><td>ComCare above-$800 AC8 added</td></tr>
+  <tr><td><code>scraper/design.md</code></td><td><span class="badge critical">Critical</span></td><td><code>orange_av_min</code>/<code>orange_av_max</code> added to CHAS JSON</td></tr>
+  <tr><td><code>scraper/design.md</code></td><td><span class="badge minor">Minor</span></td><td>MediSave section + secondary URL added</td></tr>
+  <tr><td><code>scraper/design.md</code></td><td><span class="badge minor">Minor</span></td><td><code>schemes_updated: 11</code> note added</td></tr>
+  <tr><td><code>action-plan/design.md</code></td><td><span class="badge critical">Critical</span></td><td>Dead code second guard removed from <code>getActionPlan()</code></td></tr>
+</table>
+
+<hr class="section-divider">
+
+<h2>3. Eligibility Rules Engine</h2>
+
+<h3>lib/eligibility/types.ts</h3>
+<ul>
+  <li><code>UserProfile</code> interface with all 15 fields — <code>ward_class</code> correctly excluded</li>
+  <li><code>SchemeMatch</code> with <code>source_url</code> and <code>verified_date</code> on every result</li>
+  <li><code>WardClass</code> type exported for use by bill parser</li>
+</ul>
+
+<h3>lib/eligibility/index.ts</h3>
+<ul>
+  <li><code>checkEligibility(profile: UserProfile): SchemeMatch[]</code> — single entry point</li>
+  <li>Pioneer+Merdeka both true → returns all 16 schemes as <code>not_applicable</code> with "Data error" message</li>
+  <li>Try/catch around every checker — never throws, always returns complete array</li>
+  <li>All 16 scheme checkers registered in order</li>
+</ul>
+
+<h3>Scheme Files</h3>
+<table>
+  <tr><th>File</th><th>Key Details</th><th>Source URL</th></tr>
+  <tr><td><code>government-subsidy.ts</code></td><td>SC 80–50%, PR 50–25%, PCHI=0 AV fallback (≤$21k → top, &gt;$21k → bottom)</td><td>moh.gov.sg/managing-expenses/.../subsidies-for-acute...</td></tr>
+  <tr><td><code>medishield-life.ts</code></td><td>Deductibles C=$1,500/B2=$2,000/B1=$2,500/A=$3,500, co-insurance tiers, once-per-year rule</td><td>cpf.gov.sg/member/healthcare-financing/medishield-life/...</td></tr>
+  <tr><td><code>medisave.ts</code></td><td>SC/PR auto_applied, Foreigner not_applicable</td><td>moh.gov.sg/managing-expenses/.../medisave/</td></tr>
+  <tr><td><code>chas.ts</code></td><td>Blue (PCHI ≤$1,500 or AV ≤$21k), Orange (PCHI $1,501–$2,300), Green (all SC), hotline 1800-275-2427</td><td>chas.sg</td></tr>
+  <tr><td><code>pioneer-merdeka.ts</code></td><td>Correct MOH URLs (not pioneers.gov.sg / merdekageneration.gov.sg)</td><td>moh.gov.sg/managing-expenses/.../pioneer-generation-package</td></tr>
+  <tr><td><code>medifund.ts</code></td><td>Exact what_to_say phrases — no "for my child" on Junior</td><td>moh.gov.sg/managing-expenses/.../medifund</td></tr>
+  <tr><td><code>maf.ts</code></td><td>SC/PR + medication charges → unclaimed</td><td>moh.gov.sg/managing-expenses/.../subsidies-for-drugs-on-the-maf...</td></tr>
+  <tr><td><code>elderfund.ts</code></td><td>SC, age ≥30, PCHI ≤$1,500, MediSave &lt;$10k, ADL ≥3/6, not CareShield/ElderShield</td><td>aic.sg/financial-assistance/elderfund</td></tr>
+  <tr><td><code>comcare.ts</code></td><td>SC SMTA+LTA, PR SMTA only + SC family member required</td><td>supportgowhere.life.gov.sg/schemes/</td></tr>
+  <tr><td><code>flexi-medisave.ts</code></td><td>SC/PR, age ≥60, $400/year</td><td>cpf.gov.sg/member/healthcare-financing/medisave/flexi-medisave</td></tr>
+  <tr><td><code>ip-rider-flag.ts</code></td><td>after_april_2026 → warning ($6,000 cap), before → grandfathered auto_applied, none → skip</td><td>moh.gov.sg/managing-expenses/.../integrated-shield-plans</td></tr>
+</table>
+
+<h3>Implementation Bugs Fixed During Review</h3>
+<table>
+  <tr><th>File</th><th>Bug</th><th>Fix</th></tr>
+  <tr><td>All scheme files</td><td>Kiro hallucinated <code>moh.gov.sg/healthcare-schemes-subsidies/...</code> paths (don't exist)</td><td>Corrected to <code>moh.gov.sg/managing-expenses/schemes-and-subsidies/...</code></td></tr>
+  <tr><td><code>medifund.ts</code></td><td>MediFund Junior what_to_say included "for my child" (not in spec)</td><td>Removed — exact phrase: "I would like to apply for MediFund Junior"</td></tr>
+  <tr><td><code>pioneer-merdeka.ts</code></td><td>Used <code>pioneers.gov.sg</code> and <code>merdekageneration.gov.sg</code></td><td>Corrected to MOH managing-expenses URLs</td></tr>
+  <tr><td><code>maf.ts</code></td><td>Wrong SOURCE_URL (hallucinated path)</td><td>Corrected to full MAF URL</td></tr>
+  <tr><td><code>comcare.ts</code></td><td>Used <code>msf.gov.sg/what-we-do/comcare</code> (not in spec)</td><td>Corrected to <code>supportgowhere.life.gov.sg/schemes/</code></td></tr>
+  <tr><td><code>ip-rider-flag.ts</code></td><td>Wrong SOURCE_URL (hallucinated path)</td><td>Corrected to MOH integrated-shield-plans URL</td></tr>
+  <tr><td>Test files</td><td>source_url assertions matched wrong URLs</td><td>Updated to match corrected implementation URLs</td></tr>
+</table>
+
+<hr class="section-divider">
+
+<h2>4. Test Suite</h2>
+
+<h3>Unit Tests (scheme-level)</h3>
+<table>
+  <tr><th>File</th><th>Coverage</th></tr>
+  <tr><td><code>government-subsidy.test.ts</code></td><td>All 7 SC brackets, all 7 PR brackets, PCHI=0 AV variants, boundary values, output fields</td></tr>
+  <tr><td><code>medishield-life.test.ts</code></td><td>SC/PR/Foreigner, all 4 deductibles, co-insurance tiers, once-per-year rule</td></tr>
+  <tr><td><code>medisave.test.ts</code></td><td>SC/PR auto_applied, Foreigner not_applicable, source URL</td></tr>
+  <tr><td><code>pioneer-merdeka.test.ts</code></td><td>Pioneer/Merdeka eligible + not eligible, PR/Foreigner rejection, correct MOH URLs</td></tr>
+  <tr><td><code>ip-rider-flag.test.ts</code></td><td>after/before/none states, citizenship-agnostic, correct MOH URL assertions</td></tr>
+</table>
+
+<h3>Integration Tests — All 18 Spec Scenarios</h3>
+<p>File: <code>lib/eligibility/__tests__/check-eligibility.test.ts</code></p>
+<table>
+  <tr><th>#</th><th>Scenario</th><th>What It Verifies</th></tr>
+  <tr><td>1</td><td>Uncle Tan: SC, age 68, Pioneer, PCHI $1,200</td><td>Pioneer unclaimed, CHAS Blue unclaimed, MediFund Silver unclaimed, Govt Subsidy 80%</td></tr>
+  <tr><td>2</td><td>Merdeka: SC, age 72, PCHI $3,000</td><td>Merdeka unclaimed, CHAS Green unclaimed, Govt Subsidy 65%</td></tr>
+  <tr><td>3</td><td>PCHI=0, AV $15,000</td><td>Govt Subsidy 80% (lowest bracket), CHAS Blue unclaimed</td></tr>
+  <tr><td>4</td><td>PCHI=0, AV $25,000</td><td>Govt Subsidy 50% (bottom tier)</td></tr>
+  <tr><td>5</td><td>Foreigner</td><td>All 16 schemes not_applicable</td></tr>
+  <tr><td>6</td><td>PR, age 45, PCHI $2,000</td><td>Govt Subsidy PR tier 50%, MediShield auto_applied, CHAS/MediFund not_applicable</td></tr>
+  <tr><td>7</td><td>PR ComCare with/without SC family</td><td>With SC family → unclaimed; without → not_applicable</td></tr>
+  <tr><td>8</td><td>Age 16 (under 18)</td><td>MediFund Junior unclaimed, MediFund Silver not_applicable</td></tr>
+  <tr><td>9</td><td>Age 18 (boundary)</td><td>MediFund Junior not_applicable, MediFund unclaimed</td></tr>
+  <tr><td>10</td><td>ElderFund eligible: SC, age 35, MediSave $8k, ADL</td><td>ElderFund unclaimed</td></tr>
+  <tr><td>11</td><td>ElderFund fail: MediSave $12,000</td><td>ElderFund not_applicable</td></tr>
+  <tr><td>12</td><td>ElderFund fail: CareShield policyholder</td><td>ElderFund not_applicable</td></tr>
+  <tr><td>13</td><td>IP rider after_april_2026</td><td>Warning with $6,000 cap</td></tr>
+  <tr><td>14</td><td>IP rider before_april_2026</td><td>Grandfathered auto_applied</td></tr>
+  <tr><td>15</td><td>IP rider none</td><td>not_applicable, no callout</td></tr>
+  <tr><td>16</td><td>Pioneer + Merdeka both true</td><td>All schemes not_applicable, "Data error" in every reason</td></tr>
+  <tr><td>17</td><td>All 8 SC PCHI boundary values</td><td>$0/$2,100/$2,300/$2,600/$3,000/$3,300/$3,600/$3,601 → correct rate</td></tr>
+  <tr><td>18</td><td>CHAS tiers</td><td>Orange (PCHI $1,800), Blue (PCHI $1,400), Green (any PCHI)</td></tr>
+</table>
+
+<hr class="section-divider">
+
+<h2>5. Onboarding API Route</h2>
+<p>File: <code>app/api/onboarding/route.ts</code></p>
+<ul>
+  <li>POST endpoint — no AI, pure rules engine only</li>
+  <li>Validates: citizenship (SC/PR/Foreigner), age (integer 0–120), monthly_pchi (≥0), annual_value (≥0)</li>
+  <li>Invalid JSON → 400; failed validation → 400 with specific field error</li>
+  <li>All optional fields (medisave_balance, adl_needs_assistance, etc.) spread conditionally</li>
+  <li>Returns: <code>{ schemes: SchemeMatch[], profile: UserProfile }</code></li>
+</ul>
+
+<hr class="section-divider">
+
+<h2>6. Infrastructure</h2>
+<table>
+  <tr><th>File</th><th>Change</th></tr>
+  <tr><td><code>.gitignore</code></td><td>Added <code>!.env.example</code> exception so template file can be committed</td></tr>
+  <tr><td><code>.env.local</code></td><td>Created with AWS + Bedrock placeholders (gitignored, never committed)</td></tr>
+</table>
+
+<hr class="section-divider">
+
+<p style="color:#6b7280; font-size:12px; text-align:center; margin-top:40px;">
+  BillSG — Know Your Bill. Claim What's Yours. | Amudhan & Raghul | Kiro BuildFest 2026
+</p>
+
+</body>
+</html>
