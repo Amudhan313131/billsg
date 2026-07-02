@@ -13,7 +13,7 @@ async function getClient(): Promise<Client> {
     args: [
       'ts-node',
       '--project', path.join(process.cwd(), 'tsconfig.scripts.json'),
-      path.join(process.cwd(), 'mcp-server/server.ts'),
+      path.join(process.cwd(), 'mcp-server/server.mts'),
     ],
   })
 
