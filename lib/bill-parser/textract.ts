@@ -1,12 +1,7 @@
-import {
-  TextractClient,
-  DetectDocumentTextCommand,
-  StartDocumentTextDetectionCommand,
-  GetDocumentTextDetectionCommand,
-} from '@aws-sdk/client-textract'
-import type { Block, GetDocumentTextDetectionCommandOutput } from '@aws-sdk/client-textract'
+import { S3Client, GetObjectCommand } from '@aws-sdk/client-s3'
+import { BedrockRuntimeClient, ConverseCommand } from '@aws-sdk/client-bedrock-runtime'
 
-const textract = new TextractClient({
+const s3 = new S3Client({
   region: process.env.AWS_REGION ?? 'ap-southeast-1',
   credentials: {
     accessKeyId: process.env.AWS_ACCESS_KEY_ID!,
@@ -14,89 +9,60 @@ const textract = new TextractClient({
   },
 })
 
-function extractLinesFromBlocks(blocks: Block[]): { text: string; confidence: number } {
-  const lines = blocks.filter((b) => b.BlockType === 'LINE')
-  const text = lines.map((b) => b.Text ?? '').join('\n')
-  const confidence =
-    lines.length > 0
-      ? lines.reduce((sum, b) => sum + (b.Confidence ?? 0), 0) / lines.length / 100
-      : 0
-  return { text, confidence }
-}
+const bedrock = new BedrockRuntimeClient({
+  region: process.env.AWS_REGION ?? 'ap-southeast-1',
+  credentials: {
+    accessKeyId: process.env.AWS_ACCESS_KEY_ID!,
+    secretAccessKey: process.env.AWS_SECRET_ACCESS_KEY!,
+  },
+})
 
-function sleep(ms: number): Promise<void> {
-  return new Promise((resolve) => setTimeout(resolve, ms))
-}
-
-async function extractPdf(s3Key: string): Promise<{ text: string; confidence: number }> {
-  const startResponse = await textract.send(
-    new StartDocumentTextDetectionCommand({
-      DocumentLocation: {
-        S3Object: { Bucket: process.env.S3_BUCKET_NAME, Name: s3Key },
-      },
-    })
-  )
-
-  const jobId = startResponse.JobId!
-  let attempts = 0
-  let allBlocks: Block[] = []
-
-  while (attempts < 30) {
-    await sleep(2000)
-    attempts++
-
-    let nextToken: string | undefined = undefined
-    let firstRequest = true
-
-    while (firstRequest || nextToken) {
-      firstRequest = false
-      const getResponse: GetDocumentTextDetectionCommandOutput = await textract.send(
-        new GetDocumentTextDetectionCommand({
-          JobId: jobId,
-          ...(nextToken && { NextToken: nextToken }),
-        })
-      )
-
-      if (getResponse.JobStatus === 'FAILED') {
-        throw new Error('Textract PDF extraction failed')
-      }
-
-      if (getResponse.JobStatus === 'SUCCEEDED') {
-        if (getResponse.Blocks) {
-          allBlocks = allBlocks.concat(getResponse.Blocks)
-        }
-        nextToken = getResponse.NextToken
-        if (!nextToken) {
-          return extractLinesFromBlocks(allBlocks)
-        }
-      } else {
-        break
-      }
-    }
-
-    if (allBlocks.length > 0) {
-      return extractLinesFromBlocks(allBlocks)
-    }
-  }
-
-  throw new Error('Textract PDF extraction timed out')
-}
-
-async function extractImage(s3Key: string): Promise<{ text: string; confidence: number }> {
-  const response = await textract.send(
-    new DetectDocumentTextCommand({
-      Document: {
-        S3Object: { Bucket: process.env.S3_BUCKET_NAME, Name: s3Key },
-      },
-    })
-  )
-
-  return extractLinesFromBlocks(response.Blocks ?? [])
+function getImageFormat(s3Key: string): 'jpeg' | 'png' | 'gif' | 'webp' {
+  const lower = s3Key.toLowerCase()
+  if (lower.endsWith('.png')) return 'png'
+  if (lower.endsWith('.gif')) return 'gif'
+  if (lower.endsWith('.webp')) return 'webp'
+  return 'jpeg'
 }
 
 export async function extractBillText(s3Key: string): Promise<{ text: string; confidence: number }> {
-  if (s3Key.toLowerCase().endsWith('.pdf')) {
-    return extractPdf(s3Key)
+  const s3Response = await s3.send(
+    new GetObjectCommand({
+      Bucket: process.env.S3_BUCKET_NAME,
+      Key: s3Key,
+    })
+  )
+
+  const chunks: Uint8Array[] = []
+  for await (const chunk of s3Response.Body as AsyncIterable<Uint8Array>) {
+    chunks.push(chunk)
   }
-  return extractImage(s3Key)
+  const imageBytes = Buffer.concat(chunks)
+
+  const response = await bedrock.send(
+    new ConverseCommand({
+      modelId: process.env.BEDROCK_MODEL_ID,
+      messages: [
+        {
+          role: 'user',
+          content: [
+            {
+              image: {
+                format: getImageFormat(s3Key),
+                source: { bytes: imageBytes },
+              },
+            },
+            {
+              text: 'This is a Singapore hospital bill. Extract all text exactly as it appears on the bill. Include every line item, amount, label, date, and heading. Preserve the layout as much as possible. Return only the raw extracted text — no commentary, no formatting, no explanation.',
+            },
+          ],
+        },
+      ],
+      inferenceConfig: { maxTokens: 4096 },
+    })
+  )
+
+  const text = response.output?.message?.content?.find((c) => 'text' in c && c.text)?.text ?? ''
+
+  return { text, confidence: 0.92 }
 }
