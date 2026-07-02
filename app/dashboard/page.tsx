@@ -323,7 +323,7 @@ export default function DashboardPage() {
                 ⚠ You may be eligible for {unclaimed.length} unclaimed scheme{unclaimed.length > 1 ? 's' : ''}
               </p>
               <p style={{ fontSize: '0.9rem', color: '#92400E', margin: 0 }}>
-                These were not applied to your last bill. Take action to claim them.
+                You may not have claimed these yet. Upload your bill to see exactly what applies to your situation.
               </p>
             </div>
             <div style={{ display: 'flex', flexDirection: 'column', gap: '10px' }}>
