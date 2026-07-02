@@ -1,0 +1,11 @@
+{
+  "mcpServers": {
+    "billsg-policy": {
+      "command": "npx",
+      "args": [
+        "tsx",
+        "C:\\Users\\Asus\\billsg\\mcp-server\\server.mts"
+      ]
+    }
+  }
+}

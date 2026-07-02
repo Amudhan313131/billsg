@@ -1,0 +1,17 @@
+{
+  "version": "v1",
+  "hooks": [
+    {
+      "name": "validate-billsg-inputs",
+      "description": "Validates user profile and bill inputs before LLM processing in BillSG. Checks citizenship, age, PCHI, ward class, and confidence score.",
+      "trigger": "PostFileSave",
+      "matcher": "(app/api/explain-bill|app/api/match-schemes|app/api/parse-bill).*\\.ts$",
+      "action": {
+        "type": "agent",
+        "prompt": "A BillSG API route file was saved. Validate that the route correctly checks these inputs before calling any LLM or agent:\n\n1. citizenship must be one of: 'SC', 'PR', 'Foreigner' — reject with 400 if invalid\n2. age must be an integer between 0 and 120 — reject with 400 if invalid\n3. monthly_pchi must be a number >= 0 — reject with 400 if missing or negative\n4. ward_class if present must be one of: 'A', 'B1', 'B2', 'B2+', 'C', 'unknown'\n5. confidence_score if present must be a number between 0 and 1\n\nIf any validation is missing from the route, add it. Always validate inputs before calling Bedrock, Textract, or matchSchemes(). Never call the LLM with invalid or missing inputs.\n\nAlso ensure every API route response includes the disclaimer: 'This is guidance only. Always consult a Medical Social Worker before taking action.'"
+      },
+      "timeout": 60,
+      "enabled": true
+    }
+  ]
+}
